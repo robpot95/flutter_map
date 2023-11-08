@@ -328,21 +328,14 @@ abstract class Projection {
 
   LatLng unproject(CustomPoint point);
 
-  double _inclusive(double start, double end, double value) {
-    if (value < start) return start;
-    if (value > end) return end;
-
-    return value;
-  }
-
   @protected
   double inclusiveLat(double value) {
-    return _inclusive(-90, 90, value);
+    return value.clamp(-90, 90);
   }
 
   @protected
   double inclusiveLng(double value) {
-    return _inclusive(-180, 180, value);
+    return value.clamp(-180, 180);
   }
 }
 

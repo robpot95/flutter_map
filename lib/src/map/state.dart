@@ -389,6 +389,10 @@ class FlutterMapState extends MapGestureMixin
     required MapEventSource source,
     String? id,
   }) {
+    if (newZoom.isNaN || newZoom.isInfinite) {
+      newZoom = zoom;
+    }
+
     newZoom = fitZoomToBounds(newZoom);
 
     // Algorithm thanks to https://github.com/tlserver/flutter_map_location_marker
