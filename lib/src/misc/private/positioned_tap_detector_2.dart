@@ -230,10 +230,10 @@ class TapPosition {
   Offset? relative;
 
   @override
-  bool operator ==(dynamic other) {
-    if (other is! TapPosition) return false;
-    final TapPosition typedOther = other;
-    return global == typedOther.global && relative == other.relative;
+  bool operator ==(Object other) {
+    return (other is TapPosition) &&
+        other.global == global &&
+        other.relative == relative;
   }
 
   @override

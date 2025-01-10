@@ -158,8 +158,8 @@ class PolylinePainter extends CustomPainter {
         drawPaths();
       }
       lastHash = hash;
-      needsLayerSaving = polyline.color.opacity < 1.0 ||
-          (polyline.gradientColors?.any((c) => c.opacity < 1.0) ?? false);
+      needsLayerSaving = polyline.color.a < 1.0 ||
+          (polyline.gradientColors?.any((c) => c.a < 1.0) ?? false);
 
       late final double strokeWidth;
       if (polyline.useStrokeWidthInMeter) {
