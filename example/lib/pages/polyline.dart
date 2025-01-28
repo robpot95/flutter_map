@@ -69,9 +69,9 @@ class _PolylinePageState extends State<PolylinePage> {
                           const LatLng(53.8566, 2.3522),
                         ],
                         strokeWidth: 20,
-                        color: Colors.blue.withValues(alpha: 0.6),
+                        color: Colors.blue.withOpacity(0.6),
                         borderStrokeWidth: 20,
-                        borderColor: Colors.red.withValues(alpha: 0.4),
+                        borderColor: Colors.red.withOpacity(0.4),
                       ),
                       Polyline(
                         points: [
@@ -80,7 +80,7 @@ class _PolylinePageState extends State<PolylinePage> {
                           const LatLng(54.8566, -9.3522),
                         ],
                         strokeWidth: 20,
-                        color: Colors.black.withValues(alpha: 0.2),
+                        color: Colors.black.withOpacity(0.2),
                         borderStrokeWidth: 20,
                         borderColor: Colors.white30,
                       ),
@@ -93,7 +93,7 @@ class _PolylinePageState extends State<PolylinePage> {
                         strokeWidth: 10,
                         color: Colors.yellow,
                         borderStrokeWidth: 10,
-                        borderColor: Colors.blue.withValues(alpha: 0.5),
+                        borderColor: Colors.blue.withOpacity(0.5),
                       ),
                       Polyline(
                         points: [
@@ -104,7 +104,7 @@ class _PolylinePageState extends State<PolylinePage> {
                         strokeWidth: 10,
                         color: Colors.amber,
                         borderStrokeWidth: 10,
-                        borderColor: Colors.blue.withValues(alpha: 0.5),
+                        borderColor: Colors.blue.withOpacity(0.5),
                       ),
                     ],
                   ),

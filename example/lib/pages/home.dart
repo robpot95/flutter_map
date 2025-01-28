@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                             color: Theme.of(context)
                                 .colorScheme
                                 .inverseSurface
-                                .withValues(alpha: 0.5),
+                                .withOpacity(0.5),
                           ),
                           textAlign: TextAlign.right,
                         ),
