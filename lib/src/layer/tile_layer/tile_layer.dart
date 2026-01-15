@@ -273,7 +273,7 @@ class TileLayer extends StatefulWidget {
         tileProvider = tileProvider ?? NetworkTileProvider(),
         tileUpdateTransformer = tileUpdateTransformer ?? TileUpdateTransformers.ignoreTapEvents {
     if (!kIsWeb) {
-      this.tileProvider.headers.putIfAbsent('User-Agent', () => 'flutter_map ($userAgentPackageName)');
+      // this.tileProvider.headers.putIfAbsent('User-Agent', () => 'flutter_map ($userAgentPackageName)');
     }
   }
 
