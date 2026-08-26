@@ -3,6 +3,7 @@
 ///           Now maintained here due to abandonment           ///
 /// https://github.com/arsamme/flutter-positioned-tap-detector ///
 //////////////////////////////////////////////////////////////////
+library;
 
 import 'dart:async';
 import 'dart:math';
@@ -70,10 +71,7 @@ class _TapPositionDetectorState extends State<PositionedTapDetector2> {
   }
 
   void _startStream([dynamic d]) {
-    _streamSub = _stream
-        .timeout(widget.doubleTapDelay)
-        .handleError(_onTimeout, test: (e) => e is TimeoutException)
-        .listen(_onTapConfirmed);
+    _streamSub = _stream.timeout(widget.doubleTapDelay).handleError(_onTimeout, test: (e) => e is TimeoutException).listen(_onTapConfirmed);
   }
 
   void _updateController() {
@@ -115,8 +113,7 @@ class _TapPositionDetectorState extends State<PositionedTapDetector2> {
   bool _isDoubleTap(TapDownDetails d1, TapDownDetails d2) {
     final dx = (d1.globalPosition.dx - d2.globalPosition.dx);
     final dy = (d1.globalPosition.dy - d2.globalPosition.dy);
-    return sqrt(dx * dx + dy * dy) <=
-        PositionedTapDetector2._doubleTapMaxOffset;
+    return sqrt(dx * dx + dy * dy) <= PositionedTapDetector2._doubleTapMaxOffset;
   }
 
   void _onTapDownEvent(TapDownDetails details) {
@@ -156,10 +153,7 @@ class _TapPositionDetectorState extends State<PositionedTapDetector2> {
     }
   }
 
-  void _postCallback(
-    TapDownDetails details,
-    TapPositionCallback? callback,
-  ) async {
+  void _postCallback(TapDownDetails details, TapPositionCallback? callback) async {
     _firstTap = null;
     if (callback != null) {
       callback(_getTapPositions(details));
@@ -174,8 +168,7 @@ class _TapPositionDetectorState extends State<PositionedTapDetector2> {
   }
 
   Offset? _getWidgetTopLeft() {
-    final translation =
-        context.findRenderObject()?.getTransformTo(null).getTranslation();
+    final translation = context.findRenderObject()?.getTransformTo(null).getTranslation();
     return translation != null ? Offset(translation.x, translation.y) : null;
   }
 
@@ -197,10 +190,7 @@ class _TapPositionDetectorState extends State<PositionedTapDetector2> {
       }
     }
     return GestureDetector(
-      behavior: (widget.behavior ??
-          (widget.child == null
-              ? HitTestBehavior.translucent
-              : HitTestBehavior.deferToChild)),
+      behavior: (widget.behavior ?? (widget.child == null ? HitTestBehavior.translucent : HitTestBehavior.deferToChild)),
       onTap: _onTapEvent,
       onLongPress: _onLongPressEvent,
       onTapDown: _onTapDownEvent,
@@ -231,9 +221,7 @@ class TapPosition {
 
   @override
   bool operator ==(Object other) {
-    return (other is TapPosition) &&
-        other.global == global &&
-        other.relative == relative;
+    return (other is TapPosition) && other.global == global && other.relative == relative;
   }
 
   @override

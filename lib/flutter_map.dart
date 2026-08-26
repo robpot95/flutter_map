@@ -1,5 +1,3 @@
-library flutter_map;
-
 export 'package:flutter_map/src/misc/center_zoom.dart';
 export 'package:flutter_map/src/misc/fit_bounds_options.dart';
 export 'package:flutter_map/src/misc/move_and_rotate_result.dart';

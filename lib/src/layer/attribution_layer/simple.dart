@@ -24,37 +24,26 @@ class SimpleAttributionWidget extends StatelessWidget {
   ///
   /// Displayed as a padded translucent white box with the following text:
   /// 'flutter_map | © [source]'.
-  const SimpleAttributionWidget({
-    Key? key,
-    required this.source,
-    this.onTap,
-    this.backgroundColor,
-    this.alignment = Alignment.bottomRight,
-  }) : super(key: key);
+  const SimpleAttributionWidget({super.key, required this.source, this.onTap, this.backgroundColor, this.alignment = Alignment.bottomRight});
 
   @override
   Widget build(BuildContext context) => Align(
-        alignment: alignment,
-        child: ColoredBox(
-          color: backgroundColor ?? Theme.of(context).colorScheme.surface,
-          child: GestureDetector(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(3),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('flutter_map | © '),
-                  MouseRegion(
-                    cursor: onTap == null
-                        ? MouseCursor.defer
-                        : SystemMouseCursors.click,
-                    child: source,
-                  ),
-                ],
-              ),
-            ),
+    alignment: alignment,
+    child: ColoredBox(
+      color: backgroundColor ?? Theme.of(context).colorScheme.surface,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('flutter_map | © '),
+              MouseRegion(cursor: onTap == null ? MouseCursor.defer : SystemMouseCursors.click, child: source),
+            ],
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

@@ -33,8 +33,7 @@ abstract class Crs {
   }
 
   /// Converts a map point to the sphere coordinate (at a certain zoom).
-  LatLng pointToLatLng(CustomPoint point, double zoom) => projection
-      .unproject(transformation.untransform(point, scale(zoom).toDouble()));
+  LatLng pointToLatLng(CustomPoint point, double zoom) => projection.unproject(transformation.untransform(point, scale(zoom).toDouble()));
 
   /// Zoom to Scale function.
   double scale(double zoom) => 256.0 * math.pow(2, zoom);
@@ -71,10 +70,7 @@ class CrsSimple extends Crs {
   @override
   final Transformation transformation;
 
-  CrsSimple()
-      : projection = const _LonLat(),
-        transformation = const Transformation(1, 0, -1, 0),
-        super();
+  CrsSimple() : projection = const _LonLat(), transformation = const Transformation(1, 0, -1, 0), super();
 
   @override
   bool get infinite => false;
@@ -112,14 +108,11 @@ class Epsg3857 extends Earth {
 
   static const num _scale = 0.5 / (math.pi * SphericalMercator.r);
 
-  const Epsg3857()
-      : projection = const SphericalMercator(),
-        transformation = const Transformation(_scale, 0.5, -_scale, 0.5),
-        super();
+  const Epsg3857() : projection = const SphericalMercator(), transformation = const Transformation(_scale, 0.5, -_scale, 0.5), super();
 
-// Epsg3857 seems to have latitude limits. https://epsg.io/3857
-//@override
-//(double, double) get wrapLat => const (-85.06, 85.06);
+  // Epsg3857 seems to have latitude limits. https://epsg.io/3857
+  //@override
+  //(double, double) get wrapLat => const (-85.06, 85.06);
 }
 
 /// A common CRS among GIS enthusiasts. Uses simple Equirectangular projection.
@@ -133,10 +126,7 @@ class Epsg4326 extends Earth {
   @override
   final Transformation transformation;
 
-  const Epsg4326()
-      : projection = const _LonLat(),
-        transformation = const Transformation(1 / 180, 1, -1 / 180, 0.5),
-        super();
+  const Epsg4326() : projection = const _LonLat(), transformation = const Transformation(1 / 180, 1, -1 / 180, 0.5), super();
 }
 
 /// Custom CRS
@@ -168,10 +158,9 @@ class Proj4Crs extends Crs {
     required this.projection,
     required this.transformation,
     required this.infinite,
-    List<Transformation>? transformations,
-    required List<double> scales,
-  })  : _transformations = transformations,
-        _scales = scales;
+    this._transformations,
+    required this._scales,
+  });
 
   factory Proj4Crs.fromFactory({
     required String code,
@@ -182,8 +171,7 @@ class Proj4Crs extends Crs {
     List<double>? scales,
     List<double>? resolutions,
   }) {
-    final projection =
-        _Proj4Projection(proj4Projection: proj4Projection, bounds: bounds);
+    final projection = _Proj4Projection(proj4Projection: proj4Projection, bounds: bounds);
     List<Transformation>? transformations;
     final infinite = null == bounds;
     List<double> finalScales;
@@ -193,8 +181,7 @@ class Proj4Crs extends Crs {
     } else if (null != resolutions && resolutions.isNotEmpty) {
       finalScales = resolutions.map((r) => 1 / r).toList(growable: false);
     } else {
-      throw Exception(
-          'Please provide scales or resolutions to determine scales');
+      throw Exception('Please provide scales or resolutions to determine scales');
     }
 
     if (null == origins || origins.isEmpty) {
@@ -204,8 +191,7 @@ class Proj4Crs extends Crs {
         final origin = origins[0];
         transformation = Transformation(1, -origin.x, -1, origin.y);
       } else {
-        transformations =
-            origins.map((p) => Transformation(1, -p.x, -1, p.y)).toList();
+        transformations = origins.map((p) => Transformation(1, -p.x, -1, p.y)).toList();
         transformation = null;
       }
     }
@@ -238,8 +224,7 @@ class Proj4Crs extends Crs {
   /// Converts a map point to the sphere coordinate (at a certain zoom).
   @override
   LatLng pointToLatLng(CustomPoint point, double zoom) =>
-      projection.unproject(_getTransformationByZoom(zoom)
-          .untransform(point, scale(zoom).toDouble()));
+      projection.unproject(_getTransformationByZoom(zoom).untransform(point, scale(zoom).toDouble()));
 
   /// Rescales the bounds to a given zoom value.
   @override
@@ -313,9 +298,9 @@ class Proj4Crs extends Crs {
     }
 
     final iZoom = zoom.round();
-    final lastIdx = _transformations!.length - 1;
+    final lastIdx = _transformations.length - 1;
 
-    return _transformations![iZoom > lastIdx ? lastIdx : iZoom];
+    return _transformations[iZoom > lastIdx ? lastIdx : iZoom];
   }
 }
 
@@ -340,8 +325,7 @@ abstract class Projection {
 }
 
 class _LonLat extends Projection {
-  static final Bounds<double> _bounds = Bounds<double>(
-      const CustomPoint<double>(-180, -90), const CustomPoint<double>(180, 90));
+  static final Bounds<double> _bounds = Bounds<double>(const CustomPoint<double>(-180, -90), const CustomPoint<double>(180, 90));
 
   const _LonLat() : super();
 
@@ -355,8 +339,7 @@ class _LonLat extends Projection {
 
   @override
   LatLng unproject(CustomPoint point) {
-    return LatLng(
-        inclusiveLat(point.y as double), inclusiveLng(point.x as double));
+    return LatLng(inclusiveLat(point.y as double), inclusiveLng(point.x as double));
   }
 }
 
@@ -381,17 +364,13 @@ class SphericalMercator extends Projection {
     final lat = math.max(math.min(max, latlng.latitude), -max);
     final sin = math.sin(lat * d);
 
-    return CustomPoint(
-        r * latlng.longitude * d, r * math.log((1 + sin) / (1 - sin)) / 2);
+    return CustomPoint(r * latlng.longitude * d, r * math.log((1 + sin) / (1 - sin)) / 2);
   }
 
   @override
   LatLng unproject(CustomPoint point) {
     const d = 180 / math.pi;
-    return LatLng(
-        inclusiveLat(
-            (2 * math.atan(math.exp(point.y / r)) - (math.pi / 2)) * d),
-        inclusiveLng(point.x * d / r));
+    return LatLng(inclusiveLat((2 * math.atan(math.exp(point.y / r)) - (math.pi / 2)) * d), inclusiveLng(point.x * d / r));
   }
 }
 
@@ -403,23 +382,18 @@ class _Proj4Projection extends Projection {
   @override
   final Bounds<double>? bounds;
 
-  _Proj4Projection({
-    required this.proj4Projection,
-    this.bounds,
-  }) : epsg4326 = proj4.Projection.WGS84;
+  _Proj4Projection({required this.proj4Projection, this.bounds}) : epsg4326 = proj4.Projection.WGS84;
 
   @override
   CustomPoint<double> project(LatLng latlng) {
-    final point = epsg4326.transform(
-        proj4Projection, proj4.Point(x: latlng.longitude, y: latlng.latitude));
+    final point = epsg4326.transform(proj4Projection, proj4.Point(x: latlng.longitude, y: latlng.latitude));
 
     return CustomPoint(point.x, point.y);
   }
 
   @override
   LatLng unproject(CustomPoint point) {
-    final point2 = proj4Projection.transform(
-        epsg4326, proj4.Point(x: point.x as double, y: point.y as double));
+    final point2 = proj4Projection.transform(epsg4326, proj4.Point(x: point.x as double, y: point.y as double));
 
     return LatLng(inclusiveLat(point2.y), inclusiveLng(point2.x));
   }

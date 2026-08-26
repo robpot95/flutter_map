@@ -42,16 +42,7 @@ class Polyline {
 
   /// Used to batch draw calls to the canvas.
   int get renderHashCode => Object.hash(
-      strokeWidth,
-      color,
-      borderStrokeWidth,
-      borderColor,
-      gradientColors,
-      colorsStop,
-      isDotted,
-      strokeCap,
-      strokeJoin,
-      useStrokeWidthInMeter);
+      strokeWidth, color, borderStrokeWidth, borderColor, gradientColors, colorsStop, isDotted, strokeCap, strokeJoin, useStrokeWidthInMeter);
 }
 
 class PolylineLayer extends StatelessWidget {
@@ -70,11 +61,7 @@ class PolylineLayer extends StatelessWidget {
 
     return CustomPaint(
       painter: PolylinePainter(
-        polylineCulling
-            ? polylines
-                .where((p) => p.boundingBox.isOverlapping(map.bounds))
-                .toList()
-            : polylines,
+        polylineCulling ? polylines.where((p) => p.boundingBox.isOverlapping(map.bounds)).toList() : polylines,
         map,
       ),
       size: Size(map.size.x, map.size.y),
@@ -158,8 +145,7 @@ class PolylinePainter extends CustomPainter {
         drawPaths();
       }
       lastHash = hash;
-      needsLayerSaving = polyline.color.alpha < 1.0 ||
-          (polyline.gradientColors?.any((c) => c.alpha < 1.0) ?? false);
+      needsLayerSaving = polyline.color.a < 1.0 || (polyline.gradientColors?.any((c) => c.a < 1.0) ?? false);
 
       late final double strokeWidth;
       if (polyline.useStrokeWidthInMeter) {
@@ -188,9 +174,7 @@ class PolylinePainter extends CustomPainter {
       if (polyline.gradientColors == null) {
         paint.color = polyline.color;
       } else {
-        polyline.gradientColors!.isNotEmpty
-            ? paint.shader = _paintGradient(polyline, offsets)
-            : paint.color = polyline.color;
+        polyline.gradientColors!.isNotEmpty ? paint.shader = _paintGradient(polyline, offsets) : paint.color = polyline.color;
       }
 
       if (polyline.borderColor != null && polyline.borderStrokeWidth > 0.0) {
@@ -236,8 +220,7 @@ class PolylinePainter extends CustomPainter {
     drawPaths();
   }
 
-  void _paintDottedLine(
-      ui.Path path, List<Offset> offsets, double radius, double stepLength) {
+  void _paintDottedLine(ui.Path path, List<Offset> offsets, double radius, double stepLength) {
     var startDistance = 0.0;
     for (var i = 0; i < offsets.length - 1; i++) {
       final o0 = offsets[i];
@@ -251,9 +234,7 @@ class PolylinePainter extends CustomPainter {
         path.addOval(Rect.fromCircle(center: offset, radius: radius));
         distance += stepLength;
       }
-      startDistance = distance < totalDistance
-          ? stepLength - (totalDistance - distance)
-          : distance - totalDistance;
+      startDistance = distance < totalDistance ? stepLength - (totalDistance - distance) : distance - totalDistance;
     }
     path.addOval(Rect.fromCircle(center: offsets.last, radius: radius));
   }
@@ -266,28 +247,19 @@ class PolylinePainter extends CustomPainter {
   }
 
   ui.Gradient _paintGradient(Polyline polyline, List<Offset> offsets) =>
-      ui.Gradient.linear(offsets.first, offsets.last, polyline.gradientColors!,
-          _getColorsStop(polyline));
+      ui.Gradient.linear(offsets.first, offsets.last, polyline.gradientColors!, _getColorsStop(polyline));
 
-  List<double>? _getColorsStop(Polyline polyline) =>
-      (polyline.colorsStop != null &&
-              polyline.colorsStop!.length == polyline.gradientColors!.length)
-          ? polyline.colorsStop
-          : _calculateColorsStop(polyline);
+  List<double>? _getColorsStop(Polyline polyline) => (polyline.colorsStop != null && polyline.colorsStop!.length == polyline.gradientColors!.length)
+      ? polyline.colorsStop
+      : _calculateColorsStop(polyline);
 
   List<double> _calculateColorsStop(Polyline polyline) {
     final colorsStopInterval = 1.0 / polyline.gradientColors!.length;
-    return polyline.gradientColors!
-        .map((gradientColor) =>
-            polyline.gradientColors!.indexOf(gradientColor) *
-            colorsStopInterval)
-        .toList();
+    return polyline.gradientColors!.map((gradientColor) => polyline.gradientColors!.indexOf(gradientColor) * colorsStopInterval).toList();
   }
 
   @override
   bool shouldRepaint(PolylinePainter oldDelegate) {
-    return oldDelegate.bounds != bounds ||
-        oldDelegate.polylines.length != polylines.length ||
-        oldDelegate.hash != hash;
+    return oldDelegate.bounds != bounds || oldDelegate.polylines.length != polylines.length || oldDelegate.hash != hash;
   }
 }

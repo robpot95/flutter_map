@@ -12,10 +12,7 @@ import 'package:flutter_map/src/layer/attribution_layer/rich.dart';
 abstract class SourceAttribution extends StatelessWidget {
   final VoidCallback? _onTap;
 
-  const SourceAttribution._({
-    super.key,
-    VoidCallback? onTap,
-  }) : _onTap = onTap;
+  const SourceAttribution._({super.key, this._onTap});
 
   Widget _render(BuildContext context);
 
@@ -26,10 +23,7 @@ abstract class SourceAttribution extends StatelessWidget {
 
     return GestureDetector(
       onTap: _onTap,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: _render(context),
-      ),
+      child: MouseRegion(cursor: SystemMouseCursors.click, child: _render(context)),
     );
   }
 }
@@ -39,8 +33,7 @@ abstract class SourceAttribution extends StatelessWidget {
 class TextSourceAttribution extends SourceAttribution {
   /// Default style used to display the [text], only when
   /// [SourceAttribution._onTap] is not `null`
-  static const defaultLinkTextStyle =
-      TextStyle(decoration: TextDecoration.underline);
+  static const defaultLinkTextStyle = TextStyle(decoration: TextDecoration.underline);
 
   /// The text to display as attribution, styled with [textStyle]
   final String text;
@@ -53,20 +46,12 @@ class TextSourceAttribution extends SourceAttribution {
 
   /// A simple text attribution displayed in the popup box of a
   /// [RichAttributionWidget]
-  const TextSourceAttribution(
-    this.text, {
-    super.key,
-    super.onTap,
-    this.prependCopyright = true,
-    TextStyle? textStyle,
-  })  : textStyle = textStyle ?? (onTap == null ? null : defaultLinkTextStyle),
-        super._();
+  const TextSourceAttribution(this.text, {super.key, super.onTap, this.prependCopyright = true, TextStyle? textStyle})
+    : textStyle = textStyle ?? (onTap == null ? null : defaultLinkTextStyle),
+      super._();
 
   @override
-  Widget _render(BuildContext context) => Text(
-        '${prependCopyright ? '© ' : ''}$text',
-        style: textStyle,
-      );
+  Widget _render(BuildContext context) => Text('${prependCopyright ? '© ' : ''}$text', style: textStyle);
 }
 
 /// An image attribution permanently displayed adjacent to the open/close icon of
@@ -88,13 +73,7 @@ class LogoSourceAttribution extends SourceAttribution {
 
   /// An image attribution permanently displayed adjacent to the open/close icon
   /// of a [RichAttributionWidget]
-  const LogoSourceAttribution(
-    this.image, {
-    super.key,
-    super.onTap,
-    this.tooltip,
-    this.height = 24,
-  }) : super._();
+  const LogoSourceAttribution(this.image, {super.key, super.onTap, this.tooltip, this.height = 24}) : super._();
 
   @override
   Widget _render(BuildContext context) {
