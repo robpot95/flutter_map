@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:meta/meta.dart';
 
@@ -163,24 +163,16 @@ class RichAttributionWidgetState extends State<RichAttributionWidget> {
     super.initState();
 
     if (popupExpanded) {
-      Future.delayed(
-        widget.popupInitialDisplayDuration,
-        () {
-          if (mounted) {
-            setState(() => popupExpanded = false);
-          }
-        },
-      );
+      Future.delayed(widget.popupInitialDisplayDuration, () {
+        if (mounted) {
+          setState(() => popupExpanded = false);
+        }
+      });
     }
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => WidgetsBinding.instance.addPostFrameCallback(
-        (_) => setState(
-          () => persistentAttributionSize =
-              (persistentAttributionKey.currentContext!.findRenderObject()
-                      as RenderBox)
-                  .size,
-        ),
+        (_) => setState(() => persistentAttributionSize = (persistentAttributionKey.currentContext!.findRenderObject() as RenderBox).size),
       ),
     );
   }
@@ -200,10 +192,7 @@ class RichAttributionWidgetState extends State<RichAttributionWidget> {
       ).interleave(SizedBox(width: widget.permanentHeight / 1.5)),
       if (widget.showFlutterMapAttribution)
         LogoSourceAttribution(
-          Image.asset(
-            'lib/assets/flutter_map_logo.png',
-            package: 'flutter_map',
-          ),
+          Image.asset('lib/assets/flutter_map_logo.png', package: 'flutter_map'),
           tooltip: 'flutter_map',
           height: widget.permanentHeight,
         ),
@@ -214,40 +203,26 @@ class RichAttributionWidgetState extends State<RichAttributionWidget> {
         duration: widget.animationConfig.buttonDuration,
         child: popupExpanded
             ? (widget.closeButton ??
-                (context, close) => IconButton(
-                      onPressed: close,
-                      icon: Icon(
-                        Icons.cancel_outlined,
-                        color: Theme.of(context).textTheme.titleSmall?.color ??
-                            Colors.black,
-                        size: widget.permanentHeight,
-                      ),
-                    ))(
-                context,
-                () => setState(() => popupExpanded = false),
-              )
+                  (context, close) => IconButton(
+                    onPressed: close,
+                    icon: Icon(
+                      Icons.cancel_outlined,
+                      color: Theme.of(context).textTheme.titleSmall?.color ?? Colors.black,
+                      size: widget.permanentHeight,
+                    ),
+                  ))(context, () => setState(() => popupExpanded = false))
             : (widget.openButton ??
-                (context, open) => IconButton(
-                      onPressed: open,
-                      tooltip: 'Attributions',
-                      icon: Icon(
-                        Icons.info_outlined,
-                        color: Colors.black,
-                        size: widget.permanentHeight,
-                      ),
-                    ))(
-                context,
-                () {
-                  setState(() => popupExpanded = true);
-                  mapEventSubscription = FlutterMapState.of(context)
-                      .mapController
-                      .mapEventStream
-                      .listen((e) {
-                    setState(() => popupExpanded = false);
-                    mapEventSubscription?.cancel();
-                  });
-                },
-              ),
+                  (context, open) => IconButton(
+                    onPressed: open,
+                    tooltip: 'Attributions',
+                    icon: Icon(Icons.info_outlined, color: Colors.black, size: widget.permanentHeight),
+                  ))(context, () {
+                setState(() => popupExpanded = true);
+                mapEventSubscription = FlutterMapState.of(context).mapController.mapEventStream.listen((e) {
+                  setState(() => popupExpanded = false);
+                  mapEventSubscription?.cancel();
+                });
+              }),
       ),
     ];
 
@@ -266,36 +241,25 @@ class RichAttributionWidgetState extends State<RichAttributionWidget> {
                   config: widget,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: widget.popupBackgroundColor ??
-                          Theme.of(context).colorScheme.surface,
+                      color: widget.popupBackgroundColor ?? Theme.of(context).colorScheme.surface,
                       border: Border.all(width: 0, style: BorderStyle.none),
-                      borderRadius: widget.popupBorderRadius ??
+                      borderRadius:
+                          widget.popupBorderRadius ??
                           BorderRadius.only(
                             topLeft: const Radius.circular(10),
                             topRight: const Radius.circular(10),
-                            bottomLeft: widget.alignment ==
-                                    AttributionAlignment.bottomLeft
-                                ? Radius.zero
-                                : const Radius.circular(10),
-                            bottomRight: widget.alignment ==
-                                    AttributionAlignment.bottomRight
-                                ? Radius.zero
-                                : const Radius.circular(10),
+                            bottomLeft: widget.alignment == AttributionAlignment.bottomLeft ? Radius.zero : const Radius.circular(10),
+                            bottomRight: widget.alignment == AttributionAlignment.bottomRight ? Radius.zero : const Radius.circular(10),
                           ),
                     ),
-                    constraints: BoxConstraints(
-                      minWidth: constraints.maxWidth < 420
-                          ? constraints.maxWidth
-                          : persistentAttributionSize!.width,
-                    ),
+                    constraints: BoxConstraints(minWidth: constraints.maxWidth < 420 ? constraints.maxWidth : persistentAttributionSize!.width),
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ...widget.attributions
-                              .whereType<TextSourceAttribution>(),
+                          ...widget.attributions.whereType<TextSourceAttribution>(),
                           const TextSourceAttribution(
                             "Made with 'flutter_map'",
                             prependCopyright: false,
@@ -322,10 +286,9 @@ class RichAttributionWidgetState extends State<RichAttributionWidget> {
                   child: FittedBox(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children:
-                          widget.alignment == AttributionAlignment.bottomLeft
-                              ? persistentAttributionItems.reversed.toList()
-                              : persistentAttributionItems,
+                      children: widget.alignment == AttributionAlignment.bottomLeft
+                          ? persistentAttributionItems.reversed.toList()
+                          : persistentAttributionItems,
                     ),
                   ),
                 ),

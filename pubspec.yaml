@@ -20,9 +20,10 @@ platforms:
   windows:
 
 environment:
-  sdk: ^3.13.0
+  sdk: ^3.14.0
 
 dependencies:
+  material_ui: ^1.11.1
   async: ^2.13.1
   collection: ^1.19.1
   flutter:
@@ -32,7 +33,7 @@ dependencies:
   meta: ^1.19.0
   polylabel: ^1.0.1
   proj4dart: ^3.0.0
-  vector_math: ^2.4.2
+  vector_math: ^2.4.4
 
 dev_dependencies:
   flutter_lints: ^6.0.0

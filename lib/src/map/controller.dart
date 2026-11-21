@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/src/map/state.dart';
 import 'package:latlong2/latlong.dart';
@@ -40,12 +40,7 @@ abstract class MapController {
   /// the move failed because (after adjustment when necessary):
   ///  * [center] and [zoom] are equal to the current values
   ///  * [center] is out of bounds & [MapOptions.slideOnBoundaries] isn't enabled
-  bool move(
-    LatLng center,
-    double zoom, {
-    Offset offset = Offset.zero,
-    String? id,
-  });
+  bool move(LatLng center, double zoom, {Offset offset = Offset.zero, String? id});
 
   /// Rotates the map to a decimal [degree] around the current center, where 0°
   /// is North
@@ -87,12 +82,7 @@ abstract class MapController {
   ///
   /// The operation was successful if [MoveAndRotateResult.moveSuccess] and
   /// [MoveAndRotateResult.rotateSuccess] are `true`.
-  MoveAndRotateResult rotateAroundPoint(
-    double degree, {
-    CustomPoint<double>? point,
-    Offset? offset,
-    String? id,
-  });
+  MoveAndRotateResult rotateAroundPoint(double degree, {CustomPoint<double>? point, Offset? offset, String? id});
 
   /// Calls [move] and [rotate] together, but is more efficient for the combined
   /// operation
@@ -103,12 +93,7 @@ abstract class MapController {
   ///
   /// The operation was successful if [MoveAndRotateResult.moveSuccess] and
   /// [MoveAndRotateResult.rotateSuccess] are `true`.
-  MoveAndRotateResult moveAndRotate(
-    LatLng center,
-    double zoom,
-    double degree, {
-    String? id,
-  });
+  MoveAndRotateResult moveAndRotate(LatLng center, double zoom, double degree, {String? id});
 
   /// Move and zoom the map to perfectly fit [bounds], with additional
   /// configurable [options]
@@ -121,10 +106,7 @@ abstract class MapController {
   /// fit [bounds], with additional configurable [options]
   ///
   /// Does not move/zoom the map: see [fitBounds].
-  CenterZoom centerZoomFitBounds(
-    LatLngBounds bounds, {
-    FitBoundsOptions? options,
-  });
+  CenterZoom centerZoomFitBounds(LatLngBounds bounds, {FitBoundsOptions? options});
 
   /// Convert a screen point (x/y) to its corresponding map coordinate (lat/lng),
   /// based on the map's current properties
@@ -134,11 +116,7 @@ abstract class MapController {
   /// based on the map's current screen positioning
   CustomPoint<double> latLngToScreenPoint(LatLng mapCoordinate);
 
-  CustomPoint<double> rotatePoint(
-    CustomPoint mapCenter,
-    CustomPoint point, {
-    bool counterRotation = true,
-  });
+  CustomPoint<double> rotatePoint(CustomPoint mapCenter, CustomPoint point, {bool counterRotation = true});
 
   /// Current center coordinates
   LatLng get center;
@@ -177,89 +155,37 @@ class MapControllerImpl implements MapController {
   MapControllerImpl._();
 
   @override
-  bool move(
-    LatLng center,
-    double zoom, {
-    Offset offset = Offset.zero,
-    String? id,
-  }) =>
-      _state.move(
-        center,
-        zoom,
-        offset: offset,
-        id: id,
-        source: MapEventSource.mapController,
-      );
+  bool move(LatLng center, double zoom, {Offset offset = Offset.zero, String? id}) =>
+      _state.move(center, zoom, offset: offset, id: id, source: MapEventSource.mapController);
 
   @override
-  bool rotate(double degree, {String? id}) =>
-      _state.rotate(degree, id: id, source: MapEventSource.mapController);
+  bool rotate(double degree, {String? id}) => _state.rotate(degree, id: id, source: MapEventSource.mapController);
 
   @override
-  MoveAndRotateResult rotateAroundPoint(
-    double degree, {
-    CustomPoint<double>? point,
-    Offset? offset,
-    String? id,
-  }) =>
-      _state.rotateAroundPoint(
-        degree,
-        point: point,
-        offset: offset,
-        id: id,
-        source: MapEventSource.mapController,
-      );
+  MoveAndRotateResult rotateAroundPoint(double degree, {CustomPoint<double>? point, Offset? offset, String? id}) =>
+      _state.rotateAroundPoint(degree, point: point, offset: offset, id: id, source: MapEventSource.mapController);
 
   @override
-  MoveAndRotateResult moveAndRotate(
-    LatLng center,
-    double zoom,
-    double degree, {
-    String? id,
-  }) =>
-      _state.moveAndRotate(
-        center,
-        zoom,
-        degree,
-        source: MapEventSource.mapController,
-        id: id,
-      );
+  MoveAndRotateResult moveAndRotate(LatLng center, double zoom, double degree, {String? id}) =>
+      _state.moveAndRotate(center, zoom, degree, source: MapEventSource.mapController, id: id);
 
   @override
-  bool fitBounds(
-    LatLngBounds bounds, {
-    FitBoundsOptions? options =
-        const FitBoundsOptions(padding: EdgeInsets.all(12)),
-  }) =>
+  bool fitBounds(LatLngBounds bounds, {FitBoundsOptions? options = const FitBoundsOptions(padding: EdgeInsets.all(12))}) =>
       _state.fitBounds(bounds, options!);
 
   @override
-  CenterZoom centerZoomFitBounds(
-    LatLngBounds bounds, {
-    FitBoundsOptions? options =
-        const FitBoundsOptions(padding: EdgeInsets.all(12)),
-  }) =>
+  CenterZoom centerZoomFitBounds(LatLngBounds bounds, {FitBoundsOptions? options = const FitBoundsOptions(padding: EdgeInsets.all(12))}) =>
       _state.centerZoomFitBounds(bounds, options!);
 
   @override
-  LatLng pointToLatLng(CustomPoint localPoint) =>
-      _state.pointToLatLng(localPoint);
+  LatLng pointToLatLng(CustomPoint localPoint) => _state.pointToLatLng(localPoint);
 
   @override
-  CustomPoint<double> latLngToScreenPoint(LatLng latLng) =>
-      _state.latLngToScreenPoint(latLng);
+  CustomPoint<double> latLngToScreenPoint(LatLng latLng) => _state.latLngToScreenPoint(latLng);
 
   @override
-  CustomPoint<double> rotatePoint(
-    CustomPoint mapCenter,
-    CustomPoint point, {
-    bool counterRotation = true,
-  }) =>
-      _state.rotatePoint(
-        mapCenter.toDoublePoint(),
-        point.toDoublePoint(),
-        counterRotation: counterRotation,
-      );
+  CustomPoint<double> rotatePoint(CustomPoint mapCenter, CustomPoint point, {bool counterRotation = true}) =>
+      _state.rotatePoint(mapCenter.toDoublePoint(), point.toDoublePoint(), counterRotation: counterRotation);
 
   @override
   LatLng get center => _state.center;

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_map/src/layer/attribution_layer/rich.dart';
 
 /// Base class for attributions that render themselves as widgets

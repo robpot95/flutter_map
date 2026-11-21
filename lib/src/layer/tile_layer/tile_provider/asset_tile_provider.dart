@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/src/layer/tile_layer/tile_coordinates.dart';
 import 'package:flutter_map/src/layer/tile_layer/tile_layer.dart';
@@ -21,12 +21,7 @@ class AssetTileProvider extends TileProvider {
   @override
   AssetImage getImage(TileCoordinates coordinates, TileLayer options) {
     final fallbackUrl = getTileFallbackUrl(coordinates, options);
-    return AssetImage(
-      getTileUrl(coordinates, options),
-      bundle: fallbackUrl == null
-          ? null
-          : _FlutterMapAssetBundle(fallbackUrl: fallbackUrl),
-    );
+    return AssetImage(getTileUrl(coordinates, options), bundle: fallbackUrl == null ? null : _FlutterMapAssetBundle(fallbackUrl: fallbackUrl));
   }
 }
 
@@ -35,11 +30,8 @@ class _FlutterMapAssetBundle extends CachingAssetBundle {
   final String fallbackUrl;
 
   Future<ByteData?> _loadAsset(String key) async {
-    final Uint8List encoded =
-        utf8.encoder.convert(Uri(path: Uri.encodeFull(key)).path);
-    final ByteData? asset = await ServicesBinding
-        .instance.defaultBinaryMessenger
-        .send('flutter/assets', encoded.buffer.asByteData());
+    final Uint8List encoded = utf8.encoder.convert(Uri(path: Uri.encodeFull(key)).path);
+    final ByteData? asset = await ServicesBinding.instance.defaultBinaryMessenger.send('flutter/assets', encoded.buffer.asByteData());
     return asset;
   }
 

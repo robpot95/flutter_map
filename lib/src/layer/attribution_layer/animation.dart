@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:flutter_map/src/layer/attribution_layer/rich.dart';
 
@@ -107,14 +107,13 @@ class ScaleRAWA implements RichAttributionWidgetAnimation {
     required bool isExpanded,
     required RichAttributionWidget config,
     required Widget child,
-  }) =>
-      AnimatedScale(
-        scale: isExpanded ? 1 : 0,
-        curve: isExpanded ? popupCurveOut : popupCurveIn,
-        duration: buttonDuration,
-        alignment: config.alignment.real,
-        child: child,
-      );
+  }) => AnimatedScale(
+    scale: isExpanded ? 1 : 0,
+    curve: isExpanded ? popupCurveOut : popupCurveIn,
+    duration: buttonDuration,
+    alignment: config.alignment.real,
+    child: child,
+  );
 }
 
 /// Prebuilt animation provider for a [RichAttributionWidget]
@@ -174,11 +173,5 @@ class FadeRAWA implements RichAttributionWidgetAnimation {
     required bool isExpanded,
     required RichAttributionWidget config,
     required Widget child,
-  }) =>
-      AnimatedOpacity(
-        opacity: isExpanded ? 1 : 0,
-        curve: isExpanded ? popupCurveOut : popupCurveIn,
-        duration: buttonDuration,
-        child: child,
-      );
+  }) => AnimatedOpacity(opacity: isExpanded ? 1 : 0, curve: isExpanded ? popupCurveOut : popupCurveIn, duration: buttonDuration, child: child);
 }

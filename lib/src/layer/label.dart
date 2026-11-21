@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:polylabel/polylabel.dart';
 
@@ -24,12 +24,7 @@ class Label {
     var dy = placementPoint.dy;
 
     final textSpan = TextSpan(text: labelText, style: labelStyle);
-    final textPainter = TextPainter(
-      text: textSpan,
-      textAlign: TextAlign.center,
-      textDirection: TextDirection.ltr,
-      maxLines: 1,
-    );
+    final textPainter = TextPainter(text: textSpan, textAlign: TextAlign.center, textDirection: TextDirection.ltr, maxLines: 1);
     if (dx > 0) {
       textPainter.layout(minWidth: 0, maxWidth: double.infinity);
       dx -= textPainter.width / 2;
@@ -49,29 +44,18 @@ class Label {
           canvas.rotate(-rotationRad);
           canvas.translate(-placementPoint.dx, -placementPoint.dy);
         }
-        textPainter.paint(
-          canvas,
-          Offset(dx, dy),
-        );
+        textPainter.paint(canvas, Offset(dx, dy));
         canvas.restore();
       }
     }
   }
 
   static Offset _computeCentroid(List<Offset> points) {
-    return Offset(
-      points.map((e) => e.dx).toList().average,
-      points.map((e) => e.dy).toList().average,
-    );
+    return Offset(points.map((e) => e.dx).toList().average, points.map((e) => e.dy).toList().average);
   }
 
   static Offset _computePolylabel(List<Offset> points) {
-    final labelPosition = polylabel([
-      points.map((p) => math.Point(p.dx, p.dy)).toList(),
-    ]);
-    return Offset(
-      labelPosition.point.x.toDouble(),
-      labelPosition.point.y.toDouble(),
-    );
+    final labelPosition = polylabel([points.map((p) => math.Point(p.dx, p.dy)).toList()]);
+    return Offset(labelPosition.point.x.toDouble(), labelPosition.point.y.toDouble());
   }
 }
